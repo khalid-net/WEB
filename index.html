@@ -11,8 +11,12 @@
     <link rel="stylesheet" href="css/transformations.css">
     <link rel="stylesheet" href="css/boxicons.css">
     <link rel="stylesheet" href="css/animations.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+        (function() {
+            emailjs.init("YOUR_PUBLIC_KEY"); // Replace with your EmailJS public key
+        })();
+    </script>
 </head>
 
 <body>
@@ -29,12 +33,9 @@
             <a href="#services">Skills</a>
             <a href="#Resume">Resume</a>
             <a href="#contact">Contact</a>
-            
-
         </nav>
-
     </header>
-    <section class="first-page" id="first-page" style="background-image: url('imgs/hill1.png');background-repeat: no-repeat; ">
+    <section class="first-page" id="first-page" style="background-image: url('imgs/hill1.png'); background-repeat: no-repeat; background-size: cover; background-position: center;">
     </section>
     <section class="home" id="home">
         <div class="home-img">
@@ -50,7 +51,6 @@
             <a href="#"><i class='bx bxl-github'></i></a>
             <a href="#"><i class='bx bxl-instagram'></i></a>
             <a href="#"><i class='bx bxl-twitter'></i></a>
-
             </div>
             <div class="btngroup">
                 <a href="#" class="btn" >Hire</a>
@@ -73,8 +73,8 @@
                         <br>
                             <h1 >Sudan International University</h1>
                 </div>
-        
         </div>
+
         <div class="timeline-item">
             <div class="timeline-dot"></div>
                 <div class="timeline-date">2018 - 2021</div>
@@ -85,8 +85,8 @@
                     <br>
                     <h1>National Bank of Egypt - Sudan Branch</h1>
                 </div>
-        
         </div>
+
         <div class="timeline-item">
             <div class="timeline-dot"></div>
                 <div class="timeline-date">2021 - Till Now</div>
@@ -97,7 +97,6 @@
                         <br>
                         <h1>Miles Speed Logistics Company - KSA</h1>
                 </div>
-        
         </div>
     </div>
 </section>
@@ -137,40 +136,36 @@
 </div>
 </section>
 <section class="cv-view" id="Resume">
+    <h2 class="heading">My Resume</h2>
     <div class="cv">
-        <canvas data-aid="file/Resume.pdf" id="pdf-canvas"></canvas>
-        
-        <div class="btngroup">
-            <a href="file/Resume.pdf" class="btn" id="pdf-canvas" target="_blank">Download The File</a>
-            
+        <canvas id="pdf-canvas"></canvas>
+        <div class="pdf-controls">
+            <button id="prev-page" class="btn"><i class='bx bx-chevron-left'></i> Previous</button>
+            <span id="page-info">Page <span id="page-num">1</span> of <span id="page-count">1</span></span>
+            <button id="next-page" class="btn">Next <i class='bx bx-chevron-right'></i></button>
         </div>
-        
+        <div class="btngroup">
+            <a href="file/Resume.pdf" class="btn" download>Download Resume</a>
+        </div>
+    </div>
 </section>
 <section class="contact" id="contact">
-    <form action="">
-    <h2 class="heading">Contact <span>Me</span></h2>
-    <div class="input-group">
+    <h2 class="heading">Contact <span>Me!</span></h2>
+    <form id="contact-form" onsubmit="return sendEmail(event)">
         <div class="input-box">
-            <input type="text" placeholder="Full Name">
-            <input type="email" placeholder="Email">
+            <input type="text" name="name" placeholder="Full Name" required>
+            <input type="email" name="email" placeholder="Email Address" required>
         </div>
-            
-    <br>
-    <div class="input-group-2">
-        <textarea name="" id="" cols="51" rows="6" placeholder="Your Message"></textarea>
-        
-    </div>
-    <br/>
-    <div class="btngroup">
-        <a href="#" class="btn" id="submit-button">Send Message</a>
+        <div class="input-box">
+            <input type="text" name="subject" placeholder="Subject" required>
         </div>
-</form>
+        <textarea name="message" cols="30" rows="10" placeholder="Your Message" required></textarea>
+        <button type="submit" class="btn">Send Message</button>
+        <div id="success-message" style="display: none; color: var(--main-color); margin-top: 1rem;">
+            Message sent successfully!
+        </div>
+    </form>
 </section>
-       
-
-
-
-
 
 <footer class="footer">
     <div class="social-icon" id="social">
@@ -189,96 +184,10 @@
     <p class="copyright">&copy; Khalid Hasabalrsoul Noureldin | All Rights Reserved</p>
 </footer>
 
-
-
-
     <script src="js/script.js"></script>
+    <script src="js/animations.js"></script>
+    <script src="js/contact.js"></script>
+    <script src="js/pdf-viewer.js"></script>
     <script src="js/boxicons.js"></script>
-    <script src="js/bower.json"></script>
-    <script src="js/svgo.config.js"></script>
-    <script src="js/package-lock.json"></script>
-    <script src="js/package.json"></script>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const canvas = document.getElementById('pdf-canvas');
-            const context = canvas.getContext('2d');
-            const pdfjsLib = window['pdfjs-dist/build/pdf'];
-            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
-
-            let pdfDoc = null;
-            let pageNum = 1;
-            let totalPages = 0;
-            let isSwiping = false;
-            let startX = 0;
-            let endX = 0;
-            const swipeThreshold = 50; // Minimum swipe distance in pixels
-
-            function renderPage(num) {
-                pdfDoc.getPage(num).then(function(page) {
-                    const scale = 1.5;
-                    const viewport = page.getViewport({ scale: scale });
-
-                    canvas.height = viewport.height;
-                    canvas.width = viewport.width;
-
-                    const renderContext = {
-                        canvasContext: context,
-                        viewport: viewport
-                    };
-                    page.render(renderContext);
-                });
-            }
-
-            function onSwipe(direction) {
-                if (direction === 'left' && pageNum < totalPages) {
-                    pageNum++;
-                } else if (direction === 'right' && pageNum > 1) {
-                    pageNum--;
-                }
-                renderPage(pageNum);
-            }
-
-            function handleTouchStart(event) {
-                startX = event.touches[0].clientX;
-                isSwiping = true;
-            }
-
-            function handleTouchMove(event) {
-                if (!isSwiping) return;
-                endX = event.touches[0].clientX;
-            }
-
-            function handleTouchEnd() {
-                if (!isSwiping) return;
-
-                const deltaX = endX - startX;
-                if (Math.abs(deltaX) > swipeThreshold) {
-                    const direction = deltaX > 0 ? 'right' : 'left';
-                    onSwipe(direction);
-                }
-
-                isSwiping = false;
-            }
-
-            canvas.addEventListener('touchstart', handleTouchStart);
-            canvas.addEventListener('touchmove', handleTouchMove);
-            canvas.addEventListener('touchend', handleTouchEnd);
-
-            const url = canvas.getAttribute('data-aid');
-            pdfjsLib.getDocument(url).promise.then(function(pdf) {
-                pdfDoc = pdf;
-                totalPages = pdf.numPages;
-                renderPage(pageNum);
-            }).catch(function(error) {
-                console.error('Error loading PDF:', error);
-            });
-        });
-    </script>
-    
-      
-
 </body>
-
 </html>
