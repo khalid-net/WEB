@@ -7,7 +7,8 @@ function sendEmail(event) {
     
     // Disable the submit button and show loading state
     submitButton.disabled = true;
-    submitButton.textContent = 'Sending...';
+    const originalButtonText = submitButton.innerHTML;
+    submitButton.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Sending...';
 
     // Prepare the email parameters
     const templateParams = {
@@ -19,22 +20,27 @@ function sendEmail(event) {
     };
 
     // Send the email using EmailJS
-    emailjs.send('service_gmail', 'template_contact', templateParams)
+    emailjs.send('service_6u8gf68', 'template_n595t6j', templateParams)
         .then(function(response) {
             console.log('SUCCESS!', response.status, response.text);
             form.reset();
             successMessage.style.display = 'block';
+            successMessage.style.color = 'green';
+            successMessage.textContent = 'Message sent successfully!';
             setTimeout(() => {
                 successMessage.style.display = 'none';
             }, 5000);
-        }, function(error) {
-            console.log('FAILED...', error);
-            alert('Failed to send message. Please try again later.');
         })
-        .finally(() => {
-            // Re-enable the submit button
+        .catch(function(error) {
+            console.error('FAILED...', error);
+            successMessage.style.display = 'block';
+            successMessage.style.color = 'red';
+            successMessage.textContent = 'Failed to send message. Please try again.';
+        })
+        .finally(function() {
+            // Re-enable the submit button and restore original text
             submitButton.disabled = false;
-            submitButton.textContent = 'Send Message';
+            submitButton.innerHTML = originalButtonText;
         });
 
     return false;
