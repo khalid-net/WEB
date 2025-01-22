@@ -252,8 +252,8 @@
     60%,
     80%
     {
-        -webkit-transform: scale3d(1, 1, 1) rotate3d(0, 0, 1, -10deg);
-                transform: scale3d(1, 1, 1) rotate3d(0, 0, 1, -10deg);
+        -webkit-transform: rotate3d(0, 0, 1, -10deg);
+                transform: rotate3d(0, 0, 1, -10deg);
     }
 
     to
@@ -383,4 +383,117 @@
 {
     -webkit-animation: fade-right 1.5s infinite linear;
             animation: fade-right 1.5s infinite linear;
+}
+
+/* Base scroll animation styles */
+.scroll-animate {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform, opacity;
+}
+
+.scroll-animate.animate {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Header animation */
+.header.scroll-animate {
+    opacity: 0;
+    transform: translateY(-30px);
+}
+
+.header.scroll-animate.animate {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Home image animation */
+.home-img.scroll-animate {
+    opacity: 0;
+    transform: translateX(-50px);
+}
+
+.home-img.scroll-animate.animate {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Home content animations */
+.home-content h1.scroll-animate {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transition-delay: 0.2s;
+}
+
+.home-content h1.scroll-animate.animate {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.home-content h3.scroll-animate {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transition-delay: 0.4s;
+}
+
+.home-content h3.scroll-animate.animate {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.home-content .social-icon.scroll-animate {
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transition-delay: 0.6s;
+}
+
+.home-content .social-icon.scroll-animate.animate {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Ensure smooth transitions */
+.home-content * {
+    will-change: transform, opacity;
+}
+
+/* Social icons animation */
+.social-icon.scroll-animate {
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+.social-icon.scroll-animate.animate {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Animation delays */
+.home-img.scroll-animate {
+    transition-delay: 0.2s;
+}
+
+.home-content.scroll-animate {
+    transition-delay: 0.4s;
+}
+
+.social-icon.scroll-animate {
+    transition-delay: 0.6s;
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Ensure animations play on mobile */
+@media (prefers-reduced-motion: no-preference) {
+    .scroll-animate {
+        transition-property: transform, opacity;
+    }
 }
